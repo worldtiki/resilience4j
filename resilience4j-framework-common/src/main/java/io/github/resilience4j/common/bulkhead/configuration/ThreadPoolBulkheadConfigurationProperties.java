@@ -16,11 +16,11 @@
 package io.github.resilience4j.common.bulkhead.configuration;
 
 import io.github.resilience4j.bulkhead.Bulkhead;
-import io.github.resilience4j.bulkhead.ContextPropagator;
 import io.github.resilience4j.bulkhead.ThreadPoolBulkheadConfig;
 import io.github.resilience4j.common.CommonProperties;
 import io.github.resilience4j.common.CompositeCustomizer;
 import io.github.resilience4j.core.ConfigurationNotFoundException;
+import io.github.resilience4j.core.ContextPropagator;
 import io.github.resilience4j.core.StringUtils;
 import io.github.resilience4j.core.lang.Nullable;
 
@@ -82,9 +82,8 @@ public class ThreadPoolBulkheadConfigurationProperties extends CommonProperties 
         InstanceProperties baseProperties, InstanceProperties instanceProperties,
         CompositeCustomizer<ThreadPoolBulkheadConfigCustomizer> compositeThreadPoolBulkheadCustomizer,
         String instanceName) {
-        ThreadPoolBulkheadConfig baseConfig = buildThreadPoolBulkheadConfig(
-            ThreadPoolBulkheadConfig.custom(), baseProperties,
-            compositeThreadPoolBulkheadCustomizer, instanceName);
+        ThreadPoolBulkheadConfig baseConfig = createThreadPoolBulkheadConfig(
+            baseProperties, compositeThreadPoolBulkheadCustomizer, instanceName);
         return buildThreadPoolBulkheadConfig(ThreadPoolBulkheadConfig.from(baseConfig),
             instanceProperties, compositeThreadPoolBulkheadCustomizer, instanceName);
     }

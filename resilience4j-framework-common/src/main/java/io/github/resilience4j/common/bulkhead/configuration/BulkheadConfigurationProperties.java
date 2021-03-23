@@ -53,7 +53,7 @@ public class BulkheadConfigurationProperties extends CommonProperties {
         CompositeCustomizer<BulkheadConfigCustomizer> compositeBulkheadCustomizer,
         String instanceName) {
         ConfigUtils.mergePropertiesIfAny(baseProperties, instanceProperties);
-        BulkheadConfig baseConfig = buildBulkheadConfig(BulkheadConfig.custom(), baseProperties,
+        BulkheadConfig baseConfig = createBulkheadConfig(baseProperties,
             compositeBulkheadCustomizer, instanceName);
         return buildBulkheadConfig(BulkheadConfig.from(baseConfig), instanceProperties,
             compositeBulkheadCustomizer, instanceName);
@@ -68,6 +68,9 @@ public class BulkheadConfigurationProperties extends CommonProperties {
         }
         if (instanceProperties.getMaxWaitDuration() != null) {
             builder.maxWaitDuration(instanceProperties.getMaxWaitDuration());
+        }
+        if (instanceProperties.isWritableStackTraceEnabled() != null) {
+            builder.writableStackTraceEnabled(instanceProperties.isWritableStackTraceEnabled());
         }
         compositeBulkheadCustomizer.getCustomizer(instanceName)
             .ifPresent(bulkheadConfigCustomizer -> bulkheadConfigCustomizer.customize(builder));
@@ -102,6 +105,7 @@ public class BulkheadConfigurationProperties extends CommonProperties {
 
         private Integer maxConcurrentCalls;
         private Duration maxWaitDuration;
+        private Boolean writableStackTraceEnabled;
         @Nullable
         private String baseConfig;
         @Nullable
@@ -119,6 +123,17 @@ public class BulkheadConfigurationProperties extends CommonProperties {
             }
 
             this.maxConcurrentCalls = maxConcurrentCalls;
+            return this;
+        }
+
+        public Boolean isWritableStackTraceEnabled() {
+            return writableStackTraceEnabled;
+        }
+
+        public InstanceProperties setWritableStackTraceEnabled(Boolean writableStackTraceEnabled) {
+            Objects.requireNonNull(writableStackTraceEnabled);
+
+            this.writableStackTraceEnabled = writableStackTraceEnabled;
             return this;
         }
 
